@@ -4,23 +4,16 @@ Find danske virksomheder at ringe til, byg ringelister og ring dem igennem. Rekl
 
 
 ## Stak
-TanStack Start + React 19 + Tailwind 4, bygget med Vite og Nitro. Ingen afhængighed af Lovable.
+TanStack Start + React 19 + Tailwind 4 på Lovables TanStack-skabelon (Cloudflare via Nitro). Hostes og udgives fra Lovable.
 
 ```bash
 bun install
-bun run dev      # http://localhost:3000
+bun run dev      # http://localhost:8080
 bun run test     # vitest
-bun run build    # .output/
-bun run start    # kør den byggede server (Node)
+bun run build
 ```
 
-## Hosting
-Nitro vælger selv preset ud fra hvor den bygges, så samme kode kører på:
-- **Vercel** (anbefalet): "Add New Project" → importér `nordictender/leadfinder` → Deploy. Ingen opsætning nødvendig.
-- **Netlify** eller **Cloudflare**: importér repoet; build-kommando `bun run build`.
-- **Egen server**: `bun run build && bun run start` (Node 22, port via `PORT`).
-
-Miljøvariabler (sættes hos hostingudbyderen):
+## Hemmeligheder (sættes i Lovable)
 
 | Navn | Formål |
 |---|---|
@@ -28,7 +21,7 @@ Miljøvariabler (sættes hos hostingudbyderen):
 | `CVRAPI_TOKEN` | Valgfri nøgle til cvrapi.dk (højere kvote) |
 | `CVR_ES_USER`, `CVR_ES_PASSWORD` | Erhvervsstyrelsens CVR system-til-system; slår live-filtersøgning til |
 
-**Domæne:** tilføj `leadfinder.dk` og `www.leadfinder.dk` hos hostingudbyderen og indtast de DNS-records, den viser, under DNS hos GoDaddy.
+**Domæne:** Lovable → projektets Settings → Domains → tilføj `leadfinder.dk`, og indtast de viste DNS-records hos GoDaddy.
 
 ## Sider
 | Rute | Indhold |
