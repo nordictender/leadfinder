@@ -76,3 +76,19 @@ export const searchLeads = createServerFn({ method: "POST" })
       return { source: "error", message: "CVR-registret svarede ikke. Prøv igen om lidt." };
     }
   });
+
+export type MatchResult = { ok: true; icp: import("./icp").Icp } | { ok: false; message: string };
+
+/** Foreslår kundesegmenter ud fra en beskrivelse af brugerens egen virksomhed. */
+export const matchCustomers = createServerFn({ method: "POST" })
+  .inputValidator(z.object({ description: z.string().trim().min(20).max(4000) }))
+  .handler(async ({ data }): Promise<MatchResult> => {
+    const { suggestSegments, IcpError } = await import("./icp.server");
+    try {
+      return { ok: true, icp: await suggestSegments(data.description) };
+    } catch (e) {
+      if (e instanceof IcpError) return { ok: false, message: e.message };
+      console.error(e);
+      return { ok: false, message: "Noget gik galt. Prøv igen." };
+    }
+  });

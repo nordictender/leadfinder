@@ -77,7 +77,7 @@ function CallListPage() {
 
       <div className="grid gap-6 lg:grid-cols-[1fr_380px]">
         {current ? (
-          <CallCard key={current.company.cvr} listId={list.id} lead={current} dnc={dnc} onNext={() => setCurrentCvr(null)} onSkip={() => {
+          <CallCard key={current.company.cvr} listId={list.id} pitch={list.pitch} lead={current} dnc={dnc} onNext={() => setCurrentCvr(null)} onSkip={() => {
             const rest = queue.filter((l) => l.company.cvr !== current.company.cvr);
             setCurrentCvr(nextLead(rest)?.company.cvr ?? null);
           }} />
@@ -118,7 +118,7 @@ function CallListPage() {
   );
 }
 
-function CallCard({ listId, lead, dnc, onNext, onSkip }: { listId: string; lead: Lead; dnc: ReadonlySet<string>; onNext: () => void; onSkip: () => void }) {
+function CallCard({ listId, pitch, lead, dnc, onNext, onSkip }: { listId: string; pitch?: string | undefined; lead: Lead; dnc: ReadonlySet<string>; onNext: () => void; onSkip: () => void }) {
   const c = lead.company;
   const check = checkCall(c, dnc);
   const [outcome, setOutcome] = useState<Outcome>(lead.outcome === "ny" ? "ingen_svar" : lead.outcome);
@@ -173,6 +173,13 @@ function CallCard({ listId, lead, dnc, onNext, onSkip }: { listId: string; lead:
         </div>
       )}
       {check.warnings.length > 0 && <p className="rounded-md bg-warn-soft px-3 py-2 text-sm text-warn">{check.warnings.join(" · ")}</p>}
+      {pitch && (
+        <blockquote className="rounded-md border-l-4 border-primary bg-accent/60 px-4 py-2 text-sm">
+          <span className="block text-xs font-bold uppercase tracking-wide text-muted-foreground">Åbningsreplik</span>
+          {pitch}
+          {c.people[0] && <span className="mt-1 block text-xs text-muted-foreground">Spørg efter: {c.people[0]}</span>}
+        </blockquote>
+      )}
 
       <CompanyDetails c={c} showEmail={false} />
 

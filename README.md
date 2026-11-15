@@ -24,6 +24,7 @@ Miljøvariabler (sættes hos hostingudbyderen):
 
 | Navn | Formål |
 |---|---|
+| `ANTHROPIC_API_KEY` | Slår "Mine kunder" til: Claude foreslår kundesegmenter ud fra en beskrivelse af din virksomhed |
 | `CVRAPI_TOKEN` | Valgfri nøgle til cvrapi.dk (højere kvote) |
 | `CVR_ES_USER`, `CVR_ES_PASSWORD` | Erhvervsstyrelsens CVR system-til-system; slår live-filtersøgning til |
 
@@ -33,6 +34,7 @@ Miljøvariabler (sættes hos hostingudbyderen):
 | Rute | Indhold |
 |---|---|
 | `/` | Forside (prerenderet) |
+| `/app/kunder` | Mine kunder: beskriv din virksomhed → AI-foreslåede segmenter med filtre og åbningsreplik |
 | `/app` | Find leads: filtre, live-antal, gem søgning, CSV, tilføj til ringeliste |
 | `/app/ringeliste` | Ringekø: klik-for-at-ringe, udfald (tast 1–6), noter, opfølgning, historik |
 | `/app/opslag` | Live-opslag via cvrapi.dk + import af egne CVR-numre (beriges med telefon m.m.) |

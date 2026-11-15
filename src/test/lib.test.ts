@@ -136,3 +136,22 @@ describe("CVR Elasticsearch", () => {
     expect(c).toMatchObject({ cvr: "12345674", phone: "22 33 44 55", email: null, address: "Vej 3B", employees: "5-9", employeesMin: 5, status: "aktiv", people: ["Anne Holm (direktør)"] });
   });
 });
+
+import { IcpSchema, segmentToFilters, catalogPrompt } from "@/lib/icp";
+
+describe("customer matching", () => {
+  it("accepts a valid suggestion and rejects unknown codes", () => {
+    const seg = { name: "Byg", why: "x", pitch: "Hej", industries: ["41", "43"], regions: [], employeeBands: ["10-19"], forms: ["ApS"] };
+    expect(IcpSchema.safeParse({ summary: "s", segments: [seg] }).success).toBe(true);
+    expect(IcpSchema.safeParse({ summary: "s", segments: [{ ...seg, industries: ["99"] }] }).success).toBe(false);
+  });
+  it("turns a segment into search filters with protection still enforced", () => {
+    const f = segmentToFilters({ name: "IT", why: "", pitch: "", industries: ["62"], regions: ["fyn"], employeeBands: [], forms: [] });
+    expect(f).toMatchObject({ industries: ["62"], regions: ["fyn"], onlyActive: true, requirePhone: true });
+    const r = searchCompanies(generateDemoCompanies(500, 3), f);
+    expect(r.rows.every((c) => !c.protected && c.industryCode!.startsWith("62"))).toBe(true);
+  });
+  it("lists the catalog for the model", () => {
+    expect(catalogPrompt()).toContain("62: IT og software");
+  });
+});

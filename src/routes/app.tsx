@@ -1,5 +1,5 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
-import { Ban, PhoneCall, Search, ScanSearch } from "lucide-react";
+import { Ban, PhoneCall, Search, ScanSearch, Sparkles } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { useStore } from "@/lib/store";
 
@@ -9,9 +9,10 @@ export const Route = createFileRoute("/app")({
 });
 
 const NAV = [
+  { to: "/app/kunder", label: "Mine kunder", icon: Sparkles, exact: false },
   { to: "/app", label: "Find leads", icon: Search, exact: true },
   { to: "/app/ringeliste", label: "Ringeliste", icon: PhoneCall, exact: false },
-  { to: "/app/opslag", label: "Opslag & import", icon: ScanSearch, exact: false },
+  { to: "/app/opslag", label: "Opslag", icon: ScanSearch, exact: false },
   { to: "/app/ring-ikke", label: "Ring ikke", icon: Ban, exact: false },
 ] as const;
 
@@ -43,7 +44,7 @@ function AppLayout() {
       <main className="mx-auto max-w-7xl px-4 py-6">
         <Outlet />
       </main>
-      <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-4 border-t bg-background md:hidden">
+      <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t bg-background md:hidden">
         {NAV.map((n) => (
           <Link
             key={n.to}

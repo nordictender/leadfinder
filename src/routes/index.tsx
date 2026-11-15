@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Ban, Bookmark, CircleCheck, Download, FileUp, Filter, MapPin, PhoneCall, ShieldCheck, TriangleAlert, Users } from "lucide-react";
+import { Target, ArrowRight, Ban, CircleCheck, Download, FileUp, Filter, MapPin, PhoneCall, ShieldCheck, TriangleAlert, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Pill } from "@/components/Compliance";
 import { PublicShell } from "@/components/PublicShell";
@@ -7,11 +7,11 @@ import { PublicShell } from "@/components/PublicShell";
 export const Route = createFileRoute("/")({ component: Landing });
 
 const FEATURES = [
+  { icon: Target, title: "Fortæl hvad I sælger – få kunderne", text: "Beskriv din virksomhed med et par sætninger. leadfinder foreslår de kundesegmenter, I skal ringe til, med filtre og en åbningsreplik til hvert." },
   { icon: Filter, title: "Filtrér som en sælger tænker", text: "Branche, landsdel, postnummer, antal ansatte, virksomhedsform, alder og om der er et telefonnummer. Antallet opdateres, mens du klikker." },
   { icon: PhoneCall, title: "Ringeliste, der styrer dagen", text: "Ét lead ad gangen med stort klik-for-at-ringe-nummer. Registrér udfald med tasterne 1–6, skriv noter og sæt opfølgning." },
   { icon: Users, title: "Ved hvem du skal bede om", text: "Ledelse og ejere fra CVR vises på hvert lead, så du kan spørge efter beslutningstageren ved navn." },
   { icon: FileUp, title: "Find numre på din egen liste", text: "Indsæt eller upload CVR-numre fra en messe, et CRM eller et regneark. Vi finder telefon, adresse og branche." },
-  { icon: Bookmark, title: "Gemte søgninger", text: "Gem dit salgsområde og din kundeprofil, og kom tilbage til præcis de samme virksomheder i næste uge." },
   { icon: Download, title: "Eksport til Excel og CRM", text: "CSV med semikolon, klar til dansk Excel, HubSpot eller Pipedrive. Udfald og noter kommer med." },
 ];
 
@@ -40,8 +40,8 @@ function Landing() {
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button asChild size="lg">
-                <Link to="/app">
-                  Find leads nu <ArrowRight className="size-4" />
+                <Link to="/app/kunder">
+                  Find mine kunder <ArrowRight className="size-4" />
                 </Link>
               </Button>
               <Button asChild size="lg" variant="outline">

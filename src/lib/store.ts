@@ -28,13 +28,14 @@ export type Lead = {
   history: { at: string; outcome: Outcome; note: string }[];
 };
 
-export type CallList = { id: string; name: string; createdAt: string; leads: Lead[] };
+export type CallList = { id: string; name: string; createdAt: string; leads: Lead[]; pitch?: string };
 export type SavedSearch = { id: string; name: string; filters: SearchFilters; createdAt: string };
 
-type State = { lists: CallList[]; activeListId: string | null; doNotCall: string[]; savedSearches: SavedSearch[] };
+export type Profile = { description: string; icp: import("./icp").Icp | null; updatedAt: string };
+type State = { lists: CallList[]; activeListId: string | null; doNotCall: string[]; savedSearches: SavedSearch[]; profile: Profile | null };
 
 const KEY = "leadfinder:v1";
-const EMPTY: State = { lists: [], activeListId: null, doNotCall: [], savedSearches: [] };
+const EMPTY: State = { lists: [], activeListId: null, doNotCall: [], savedSearches: [], profile: null };
 let state: State = EMPTY;
 let loaded = false;
 const listeners = new Set<() => void>();
@@ -78,9 +79,9 @@ export function newLead(company: Company): Lead {
   return { company, outcome: "ny", note: "", followUp: null, attempts: 0, lastCallAt: null, history: [] };
 }
 
-export function createList(name: string, companies: Company[] = []): string {
+export function createList(name: string, companies: Company[] = [], pitch?: string): string {
   load();
-  const list: CallList = { id: id(), name, createdAt: new Date().toISOString(), leads: companies.map(newLead) };
+  const list: CallList = { id: id(), name, createdAt: new Date().toISOString(), leads: companies.map(newLead), ...(pitch ? { pitch } : {}) };
   set({ ...state, lists: [list, ...state.lists], activeListId: list.id });
   return list.id;
 }
@@ -163,4 +164,20 @@ export function nextLead(leads: readonly Lead[], now = new Date()): Lead | null 
   if (fresh) return fresh;
   const retry = open.filter((l) => l.outcome === "ingen_svar" || (l.outcome !== "ny" && !l.followUp)).sort((a, b) => a.attempts - b.attempts);
   return retry[0] ?? null;
+}
+
+export function saveProfile(profile: Profile) {
+  load();
+  set({ ...state, profile });
+}
+
+/** Filtre + replik der skal åbnes på søgesiden (overføres i hukommelsen ved navigation). */
+let pending: { filters: SearchFilters; name: string; pitch: string } | null = null;
+export function setPendingSegment(p: typeof pending) {
+  pending = p;
+}
+export function takePendingSegment() {
+  const p = pending;
+  pending = null;
+  return p;
 }

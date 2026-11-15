@@ -14,6 +14,7 @@ import { Route as AppRouteImport } from './routes/app'
 import { Route as PrivatlivRouteImport } from './routes/privatliv'
 import { Route as VilkaarRouteImport } from './routes/vilkaar'
 import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as AppKunderRouteImport } from './routes/app.kunder'
 import { Route as AppOpslagRouteImport } from './routes/app.opslag'
 import { Route as AppRingIkkeRouteImport } from './routes/app.ring-ikke'
 import { Route as AppRingelisteRouteImport } from './routes/app.ringeliste'
@@ -43,6 +44,11 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRoute,
 } as any)
+const AppKunderRoute = AppKunderRouteImport.update({
+  id: '/kunder',
+  path: '/kunder',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppOpslagRoute = AppOpslagRouteImport.update({
   id: '/opslag',
   path: '/opslag',
@@ -64,6 +70,7 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRouteWithChildren
   '/privatliv': typeof PrivatlivRoute
   '/vilkaar': typeof VilkaarRoute
+  '/app/kunder': typeof AppKunderRoute
   '/app/opslag': typeof AppOpslagRoute
   '/app/ring-ikke': typeof AppRingIkkeRoute
   '/app/ringeliste': typeof AppRingelisteRoute
@@ -73,6 +80,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/privatliv': typeof PrivatlivRoute
   '/vilkaar': typeof VilkaarRoute
+  '/app/kunder': typeof AppKunderRoute
   '/app/opslag': typeof AppOpslagRoute
   '/app/ring-ikke': typeof AppRingIkkeRoute
   '/app/ringeliste': typeof AppRingelisteRoute
@@ -84,6 +92,7 @@ export interface FileRoutesById {
   '/app': typeof AppRouteWithChildren
   '/privatliv': typeof PrivatlivRoute
   '/vilkaar': typeof VilkaarRoute
+  '/app/kunder': typeof AppKunderRoute
   '/app/opslag': typeof AppOpslagRoute
   '/app/ring-ikke': typeof AppRingIkkeRoute
   '/app/ringeliste': typeof AppRingelisteRoute
@@ -96,6 +105,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/privatliv'
     | '/vilkaar'
+    | '/app/kunder'
     | '/app/opslag'
     | '/app/ring-ikke'
     | '/app/ringeliste'
@@ -105,6 +115,7 @@ export interface FileRouteTypes {
     | '/'
     | '/privatliv'
     | '/vilkaar'
+    | '/app/kunder'
     | '/app/opslag'
     | '/app/ring-ikke'
     | '/app/ringeliste'
@@ -115,6 +126,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/privatliv'
     | '/vilkaar'
+    | '/app/kunder'
     | '/app/opslag'
     | '/app/ring-ikke'
     | '/app/ringeliste'
@@ -165,6 +177,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/kunder': {
+      id: '/app/kunder'
+      path: '/kunder'
+      fullPath: '/app/kunder'
+      preLoaderRoute: typeof AppKunderRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/opslag': {
       id: '/app/opslag'
       path: '/opslag'
@@ -190,6 +209,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AppRouteChildren {
+  AppKunderRoute: typeof AppKunderRoute
   AppOpslagRoute: typeof AppOpslagRoute
   AppRingIkkeRoute: typeof AppRingIkkeRoute
   AppRingelisteRoute: typeof AppRingelisteRoute
@@ -197,6 +217,7 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppKunderRoute: AppKunderRoute,
   AppOpslagRoute: AppOpslagRoute,
   AppRingIkkeRoute: AppRingIkkeRoute,
   AppRingelisteRoute: AppRingelisteRoute,

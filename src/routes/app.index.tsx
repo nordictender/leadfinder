@@ -14,7 +14,7 @@ import { checkCall } from "@/lib/compliance";
 import { downloadText, toCsv } from "@/lib/csv";
 import { DEMO_COMPANIES } from "@/lib/demo-data";
 import { EMPTY_FILTERS, searchCompanies, type SearchFilters } from "@/lib/search";
-import { addToList, createList, deleteSavedSearch, saveSearch, useStore } from "@/lib/store";
+import { addToList, createList, deleteSavedSearch, saveSearch, takePendingSegment, useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/app/")({ component: SearchPage });
@@ -23,7 +23,8 @@ const PAGE = 50;
 
 function SearchPage() {
   const store = useStore();
-  const [f, setF] = useState<SearchFilters>(EMPTY_FILTERS);
+  const [segment] = useState(() => takePendingSegment());
+  const [f, setF] = useState<SearchFilters>(segment?.filters ?? EMPTY_FILTERS);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [open, setOpen] = useState<string | null>(null);
   const [limit, setLimit] = useState(PAGE);
@@ -73,7 +74,7 @@ function SearchPage() {
       const n = addToList(active.id, companies);
       toast.success(`${n} tilføjet til "${active.name}"`, { description: n < companies.length ? `${companies.length - n} var der allerede.` : undefined });
     } else {
-      createList(describe(f) || "Min ringeliste", companies);
+      createList(segment?.name ?? (describe(f) || "Min ringeliste"), companies, segment?.pitch);
       toast.success(`Ringeliste oprettet med ${companies.length} virksomheder`);
     }
     setSelected(new Set());
@@ -81,9 +82,9 @@ function SearchPage() {
 
   const newList = () => {
     const companies = chosen();
-    const name = window.prompt("Navn på den nye ringeliste", describe(f) || "Ny ringeliste");
+    const name = window.prompt("Navn på den nye ringeliste", segment?.name ?? (describe(f) || "Ny ringeliste"));
     if (!name) return;
-    createList(name, companies);
+    createList(name, companies, segment?.pitch);
     toast.success(`"${name}" oprettet med ${companies.length} virksomheder`);
     setSelected(new Set());
   };
@@ -155,6 +156,11 @@ function SearchPage() {
       </aside>
 
       <section className="min-w-0 space-y-4">
+        {segment && (
+          <div className="rounded-lg border bg-card px-3 py-2 text-sm">
+            <span className="text-muted-foreground">Segment:</span> <strong>{segment.name}</strong>
+          </div>
+        )}
         {remote.data?.source === "error" && <p className="rounded-lg bg-block-soft px-3 py-2 text-sm">{remote.data.message}</p>}
         {!isLive && <div className="flex items-start gap-2 rounded-lg border border-warn/30 bg-warn-soft px-3 py-2 text-sm">
           <FlaskConical className="mt-0.5 size-4 shrink-0 text-warn" aria-hidden />
